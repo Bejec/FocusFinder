@@ -1,0 +1,1 @@
+focusFinder2\Scripts\activate

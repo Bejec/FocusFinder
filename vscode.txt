@@ -1,0 +1,9 @@
+powershell: code --list-extensions | % { "code --install-extension $_" }
+
+code --install-extension aaron-bond.better-comments
+code --install-extension CoenraadS.bracket-pair-colorizer
+code --install-extension eamodio.gitlens
+code --install-extension formulahendry.code-runner
+code --install-extension mde.select-highlight-minimap
+code --install-extension ms-python.python
+code --install-extension njpwerner.autodocstring

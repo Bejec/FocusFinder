@@ -4,6 +4,7 @@ print (cv2.__version__)
 import threading
 import time
 import numpy as np
+import generalMath as gm
 
 # custom libraries:
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -16,8 +17,7 @@ iCam = 2
 
 
 # Intializations
-screen1 = np.zeros((600, 800, 3), np.uint8)
-cv2.imshow("screen1",screen1)
+
 # forwardCam = cv2.VideoCapture(0)
 # forwardCam.set(3, 2560)
 # forwardCam.set(4, 960)
@@ -33,19 +33,52 @@ cv2.imshow("screen1",screen1)
 running = 1
 
 # Main Loop the thread status checker/handler
+def foo(x, y):
+    return 0 if y == 0 else x / y
+
+
+
+t0 = float(gm.truncate(time.clock(), 3))
+tprev = 0
+
+tprev1 = 0
+
+period = 0.010
+tolerance = period / 10
+period1 = 0.100
+tolerance1 = period1 / 10
+
 
 while(running):
-   t0 = time.time()
-   key = cv2.waitKey(1)
-   # print(key)
-   if (key % 256 == 27): #Escape
-      print("Closing")
-      running = 0
-   t1 = time.time()
-   total = (t1-t0)
-   print(total)
-   cv2.putText(screen1, "FPS: "+str(round(1/total)) + "  Seconds: " + str(total), (5, 450), font, 1, (255, 128, 128), 2, cv2.LINE_AA)
-   cv2.imshow("screen1",screen1)
-   screen1 = np.zeros((600, 800, 3), np.uint8)
+   t1 = float(gm.truncate(time.clock(), 2))
 
-cv2.destroyAllWindows()
+   # this is the thread
+   if ((t1 > tprev+(period-tolerance)) and (t1 < tprev+(period+tolerance))):
+      #print("time " + str(time.clock()))
+      tprev = t1
+      print(tprev)
+      # function100(deltaTime)
+
+   # this is the thread watcher
+   if (t1 > tprev + 2*(period-tolerance)):
+      print("cycle missed")
+      tprev = t1
+      
+
+   if ((t1 > tprev1+(period1-tolerance1)) and (t1 < tprev1+(period1+tolerance1))):
+      #print("time " + str(time.clock()))
+      tprev1 = t1
+      print(tprev1)
+      print("slower thread")
+      # function100(deltaTime)
+
+   # this is the thread watcher
+   if (t1 > tprev1 + 2*(period1-tolerance1)):
+      print("slow cycle missed")
+      tprev1 = t1
+
+
+   # print(t1)
+   # time.sleep(0.01)
+   
+   
